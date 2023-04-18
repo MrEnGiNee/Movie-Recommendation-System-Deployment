@@ -1,0 +1,1182 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Movie\_Recommendation\_System\_Copy2}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{movie-recommendation-system}{%
+\section{Movie Recommendation
+System}\label{movie-recommendation-system}}
+
+    A recommender system aims to suggest relevant content or products to
+users that might be liked or purchased by them. It helps to find items
+that the user is looking for --- and they don't even realize it until
+the recommendation is displayed. Different strategies have to be applied
+for different clients and they are determined by available data
+
+    \hypertarget{there-are-two-main-techniques-used-in-recommendation-system-known-as-content-based-filtering-and-collaborative-filtering.}{%
+\subsubsection{There are two main techniques used in recommendation
+system, known as content-based filtering and collaborative
+filtering.}\label{there-are-two-main-techniques-used-in-recommendation-system-known-as-content-based-filtering-and-collaborative-filtering.}}
+
+    \hypertarget{content-based}{%
+\paragraph{Content Based :}\label{content-based}}
+
+    Content-based filtering uses item features to recommend other items
+similar to what the user likes, based on their previous actions or
+explicit feedback.For example, if user A watched two horror movies,
+another horror movie will be proposed to him.
+
+    \hypertarget{collaborative-filtering}{%
+\paragraph{Collaborative Filtering :}\label{collaborative-filtering}}
+
+    To address some of the limitations of content-based filtering,
+collaborative filtering uses similarities between users and items
+simultaneously to provide recommendations. Collaborative filtering
+models can recommend an item to user A based on the interests of a
+similar user B. Main advantage is that they learn users' embeddings
+automatically, without the need for hand-engineering.
+
+    \hypertarget{importing-libraries-datasets}{%
+\paragraph{Importing Libraries \&
+Datasets}\label{importing-libraries-datasets}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd} \PY{c+c1}{\PYZsh{} Python library for data analysis and data frame}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np} \PY{c+c1}{\PYZsh{} Numerical Python library for linear algebra and computations}
+\PY{n}{pd}\PY{o}{.}\PY{n}{set\PYZus{}option}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{display.max\PYZus{}columns}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)} \PY{c+c1}{\PYZsh{} code to display all columns}
+
+\PY{c+c1}{\PYZsh{} Visualisation libraries}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+
+\PY{c+c1}{\PYZsh{} libraries for text processing}
+\PY{k+kn}{import} \PY{n+nn}{nltk}
+\PY{k+kn}{from} \PY{n+nn}{nltk}\PY{n+nn}{.}\PY{n+nn}{stem}\PY{n+nn}{.}\PY{n+nn}{snowball} \PY{k+kn}{import} \PY{n}{SnowballStemmer}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{feature\PYZus{}extraction}\PY{n+nn}{.}\PY{n+nn}{text} \PY{k+kn}{import} \PY{n}{TfidfVectorizer}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics}\PY{n+nn}{.}\PY{n+nn}{pairwise} \PY{k+kn}{import} \PY{n}{cosine\PYZus{}similarity}
+
+\PY{c+c1}{\PYZsh{} to display images}
+\PY{k+kn}{from} \PY{n+nn}{skimage} \PY{k+kn}{import} \PY{n}{io}
+
+\PY{c+c1}{\PYZsh{} to save the required files}
+\PY{k+kn}{import} \PY{n+nn}{pickle}
+
+\PY{k+kn}{import} \PY{n+nn}{warnings}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ignore}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{} To prevent kernel from showing any warning}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C:/Users/dell/Downloads/Recommendation System/movies.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{initial-analysis}{%
+\paragraph{Initial Analysis}\label{initial-analysis}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} How does the data look like?}
+\PY{n}{df}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+       id                        title  \textbackslash{}
+0  677179                    Creed III
+1   76600     Avatar: The Way of Water
+2  502356  The Super Mario Bros. Movie
+3  631842           Knock at the Cabin
+4  646389                        Plane
+
+                                      genres original\_language  \textbackslash{}
+0                               Drama-Action                en
+1           Science Fiction-Adventure-Action                en
+2  Animation-Adventure-Family-Fantasy-Comedy                en
+3                    Horror-Mystery-Thriller                en
+4                  Action-Adventure-Thriller                en
+
+                                            overview  popularity  \textbackslash{}
+0  After dominating the boxing world Adonis Creed{\ldots}    9575.225
+1  Set more than a decade after the events of the{\ldots}    9366.788
+2  While working underground to fix a water main {\ldots}    5132.098
+3  While vacationing at a remote cabin a young gi{\ldots}    3422.537
+4  After a heroic job of successfully landing his{\ldots}    2618.646
+
+                                production\_companies release\_date  \textbackslash{}
+0  Metro-Goldwyn-Mayer-Proximity Media-Balboa Pro{\ldots}   2023-03-01
+1      20th Century Studios-Lightstorm Entertainment   2022-12-14
+2           Universal Pictures-Illumination-Nintendo   2023-04-05
+3  Blinding Edge Pictures-Universal Pictures-Film{\ldots}   2023-02-01
+4  MadRiver Pictures-Di Bonaventura Pictures-G-BA{\ldots}   2023-01-12
+
+        budget       revenue  runtime    status  \textbackslash{}
+0   75000000.0  2.580000e+08    116.0  Released
+1  350000000.0  2.312336e+09    192.0  Released
+2  100000000.0  5.800000e+07     92.0  Released
+3   20000000.0  5.200000e+07    100.0  Released
+4   25000000.0  5.100000e+07    107.0  Released
+
+                                             tagline  vote\_average  \textbackslash{}
+0                      You can't run from your past.         7.305
+1                                 Return to Pandora.         7.751
+2                                                NaN         7.556
+3  Save your family or save humanity. Make the ch{\ldots}         6.457
+4                     Survive together or die alone.         6.901
+
+   vote\_count                                            credits  \textbackslash{}
+0       845.0  Michael B. Jordan-Tessa Thompson-Jonathan Majo{\ldots}
+1      6748.0  Sam Worthington-Zoe Saldaña-Sigourney Weaver-S{\ldots}
+2       332.0  Chris Pratt-Anya Taylor-Joy-Charlie Day-Jack B{\ldots}
+3       888.0  Dave Bautista-Jonathan Groff-Ben Aldridge-Kris{\ldots}
+4       785.0  Gerard Butler-Mike Colter-Yoson An-Tony Goldwy{\ldots}
+
+                                            keywords  \textbackslash{}
+0  philadelphia pennsylvania-husband wife relatio{\ldots}
+1  loss of loved one-dying and death-alien life-f{\ldots}
+2  video game-plumber-magic mushroom-based on vid{\ldots}
+3  based on novel or book-sacrifice-cabin-faith-e{\ldots}
+4  pilot-airplane-philippines-held hostage-plane {\ldots}
+
+                        poster\_path                     backdrop\_path  \textbackslash{}
+0  /vJU3rXSP9hwUuLeq8IpfsJShLOk.jpg  /5i6SjyDbDWqyun8klUuCxrlFbyw.jpg
+1  /t6HIqrRAclMCA60NsSmeqe9RmNV.jpg  /s16H6tpK2utvwDtzZ8Qy4qm5Emw.jpg
+2  /qNBAXBIQlnOThrVvA6mA2B5ggV6.jpg  /iw0Na1UBHgA5BgifwmQ8vKhlWgA.jpg
+3  /dm06L9pxDOL9jNSK4Cb6y139rrG.jpg  /zWDMQX0sPaW2u0N2pJaYA8bVVaJ.jpg
+4  /qi9r5xBgcc9KTxlOLjssEbDgO0J.jpg  /9Rq14Eyrf7Tu1xk0Pl7VcNbNh1n.jpg
+
+                                     recommendations
+0  965839-267805-943822-842942-1035806-823999-107{\ldots}
+1  183392-111332-702432-505642-1064215-436270-874{\ldots}
+2                                                NaN
+3  1058949-646389-772515-505642-143970-667216-104{\ldots}
+4  505642-758769-864692-631842-1058949-925943-758{\ldots}
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}How big is data?}
+\PY{n}{df}\PY{o}{.}\PY{n}{shape}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+(722938, 20)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} What is the data type of cols?}
+\PY{n}{df}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 722938 entries, 0 to 722937
+Data columns (total 20 columns):
+ \#   Column                Non-Null Count   Dtype
+---  ------                --------------   -----
+ 0   id                    722938 non-null  int64
+ 1   title                 722934 non-null  object
+ 2   genres                511965 non-null  object
+ 3   original\_language     722938 non-null  object
+ 4   overview              604281 non-null  object
+ 5   popularity            722938 non-null  float64
+ 6   production\_companies  337163 non-null  object
+ 7   release\_date          670275 non-null  object
+ 8   budget                722938 non-null  float64
+ 9   revenue               722938 non-null  float64
+ 10  runtime               688450 non-null  float64
+ 11  status                722938 non-null  object
+ 12  tagline               108063 non-null  object
+ 13  vote\_average          722938 non-null  float64
+ 14  vote\_count            722938 non-null  float64
+ 15  credits               497776 non-null  object
+ 16  keywords              210239 non-null  object
+ 17  poster\_path           537548 non-null  object
+ 18  backdrop\_path         222421 non-null  object
+ 19  recommendations       34696 non-null   object
+dtypes: float64(6), int64(1), object(13)
+memory usage: 110.3+ MB
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Are there any missing values?}
+\PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+id                           0
+title                        4
+genres                  210973
+original\_language            0
+overview                118657
+popularity                   0
+production\_companies    385775
+release\_date             52663
+budget                       0
+revenue                      0
+runtime                  34488
+status                       0
+tagline                 614875
+vote\_average                 0
+vote\_count                   0
+credits                 225162
+keywords                512699
+poster\_path             185390
+backdrop\_path           500517
+recommendations         688242
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Are there duplicate values?}
+\PY{n}{df}\PY{o}{.}\PY{n}{duplicated}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+0
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Observations 👀 1. There are more than 7 lakh rows and 20 columns 2. Data
+consists of 6 numeric columns and 14 object/string columns 3. There are
+many columns with lots of missing valuest 4. There are duplicate values
+present in data
+
+    \hypertarget{preprocessing}{%
+\paragraph{Preprocessing}\label{preprocessing}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{title}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{duplicated}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+147575
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Wow! there are 147575 movies with same title. Now these might be
+duplicate movies but there's possibility that some might be different
+movies with same title. That's why Let's check if there are any movies
+with same title and same release date
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{title}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{release\PYZus{}date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{duplicated}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+62860
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} lets get rid of the duplicate movies}
+\PY{n}{df}\PY{o}{.}\PY{n}{drop\PYZus{}duplicates}\PY{p}{(}\PY{n}{subset}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{title}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{release\PYZus{}date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df}\PY{o}{.}\PY{n}{shape}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+(660078, 20)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Now we have 6 lakh movies but most of the movies have 0 vote count. so
+we will consider only those movies which have at least more than 30 vote
+counts.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} filtering the movies}
+\PY{n}{df1} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{n}{df}\PY{o}{.}\PY{n}{vote\PYZus{}count} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{l+m+mi}{30}\PY{p}{]}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df1}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+index                       0
+id                          0
+title                       0
+genres                     64
+original\_language           0
+overview                  237
+popularity                  0
+production\_companies     2101
+release\_date                0
+budget                      0
+revenue                     0
+runtime                     1
+status                      0
+tagline                 14673
+vote\_average                0
+vote\_count                  0
+credits                   334
+keywords                 6520
+poster\_path                38
+backdrop\_path             949
+recommendations         11173
+dtype: int64
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Replace the Nan with \PYZsq{}\PYZsq{}}
+\PY{n}{df1}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    We are making content based recommendation system and genres , overview
+are very important to find similar movies. So i will delete movies which
+don't have genres and overview.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} finding index with \PYZsq{}\PYZsq{} genres and overview}
+\PY{n}{index} \PY{o}{=} \PY{n}{df1}\PY{p}{[}\PY{p}{(}\PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{genres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{overview}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{]}\PY{o}{.}\PY{n}{index}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} droping those index}
+\PY{n}{df1}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{index}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{genres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{genres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{keywords}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{keywords}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{credits}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{credits}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{creating-tags}{%
+\paragraph{Creating Tags}\label{creating-tags}}
+
+    Lets create a column with all the important columns which describe a
+movie, so we can create tags out of it
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tags}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{overview}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{genres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{keywords}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{credits}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{original\PYZus{}language}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df1}\PY{o}{.}\PY{n}{tags}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'After dominating the boxing world Adonis Creed has been thriving in both his
+career and family life. When a childhood friend and former boxing prodigy Damien
+Anderson resurfaces after serving a long sentence in prison he is eager to prove
+that he deserves his shot in the ring. The face-off between former friends is
+more than just a fight. To settle the score Adonis must put his future on the
+line to battle Damien — a fighter who has nothing to lose. Drama Action
+philadelphia pennsylvania husband wife relationship deaf sports sequel orphan
+former best friend ex con childhood friends juvenile detention center boxing
+prodigy MichaelB.Jordan TessaThompson JonathanMajors WoodHarris PhyliciaRashād
+en'
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Let's apply stemming on tags column
+
+    Stemming usually refers to a crude heuristic process that chops off the
+ends of words in the hope of achieving this goal correctly most of the
+time, and often includes the removal of derivational affixes.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{stemmer} \PY{o}{=} \PY{n}{SnowballStemmer}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{english}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{k}{def} \PY{n+nf}{stem}\PY{p}{(}\PY{n}{text}\PY{p}{)}\PY{p}{:}
+    \PY{n}{y} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{text}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+        \PY{n}{y}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{stemmer}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{)}
+        
+    \PY{k}{return} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{y}\PY{p}{)}
+
+\PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tags}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tags}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{stem}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Removing punctuation }
+\PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tags}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tags}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{str}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[\PYZca{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{w}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{s]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    TF-IDF is an abbreviation for Term Frequency Inverse Document Frequency.
+This is very common algorithm to transform text into a meaningful
+representation of numbers which is used to fit machine algorithm for
+prediction.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{tfidf} \PY{o}{=} \PY{n}{TfidfVectorizer}\PY{p}{(}\PY{n}{stop\PYZus{}words}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{english}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{tfidf\PYZus{}matrix} \PY{o}{=} \PY{n}{tfidf}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tags}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df1}\PY{o}{.}\PY{n}{tags}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'after domin the box world adoni creed has been thrive in both his career and
+famili life when a childhood friend and former box prodigi damien anderson
+resurfac after serv a long sentenc in prison he is eager to prove that he deserv
+his shot in the ring the faceoff between former friend is more than just a fight
+to settl the score adoni must put his futur on the line to battl damien  a
+fighter who has noth to lose drama action philadelphia pennsylvania husband wife
+relationship deaf sport sequel orphan former best friend ex con childhood friend
+juvenil detent center box prodigi michaelbjordan tessathompson jonathanmajor
+woodharri phyliciarashād en'
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{recommendation-system}{%
+\paragraph{Recommendation System}\label{recommendation-system}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Function that takes in movie title as input and outputs most similar movies}
+\PY{k}{def} \PY{n+nf}{get\PYZus{}recommendations}\PY{p}{(}\PY{n}{title}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Get the index of the movie that matches the title}
+    \PY{n}{idx} \PY{o}{=} \PY{n}{df1}\PY{o}{.}\PY{n}{index}\PY{p}{[}\PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{title}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{n}{title}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{c+c1}{\PYZsh{} show given movie poster}
+    \PY{k}{try}\PY{p}{:}
+        \PY{n}{a} \PY{o}{=} \PY{n}{io}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{https://image.tmdb.org/t/p/w500/}\PY{l+s+si}{\PYZob{}}\PY{n}{df1}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{idx}\PY{p}{,}\PY{+w}{ }\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{poster\PYZus{}path}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{a}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{off}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{n}{title}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+    \PY{k}{except}\PY{p}{:}\PY{k}{pass}
+    
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Recommendations}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+
+    \PY{c+c1}{\PYZsh{} Get the pairwsie similarity scores of all movies with that movie}
+    \PY{n}{sim\PYZus{}scores} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{enumerate}\PY{p}{(}
+        \PY{n}{cosine\PYZus{}similarity}\PY{p}{(}
+            \PY{n}{tfidf\PYZus{}matrix}\PY{p}{,}
+            \PY{n}{tfidf\PYZus{}matrix}\PY{p}{[}\PY{n}{idx}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Sort the movies based on the similarity scores}
+    \PY{n}{sim\PYZus{}scores} \PY{o}{=} \PY{n+nb}{sorted}\PY{p}{(}\PY{n}{sim\PYZus{}scores}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{reverse}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Get the scores of the 10 most similar movies}
+    \PY{n}{sim\PYZus{}scores} \PY{o}{=} \PY{n}{sim\PYZus{}scores}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}
+
+    \PY{c+c1}{\PYZsh{} Get the movie indices}
+    \PY{n}{movie\PYZus{}indices} \PY{o}{=} \PY{p}{[}\PY{n}{i}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{sim\PYZus{}scores}\PY{p}{]}
+
+    \PY{c+c1}{\PYZsh{} Return the top 10 most similar movies}
+    \PY{n}{result} \PY{o}{=} \PY{n}{df1}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{n}{movie\PYZus{}indices}\PY{p}{]}
+    
+    \PY{c+c1}{\PYZsh{} show reco. movie posters}
+    \PY{n}{fig}\PY{p}{,} \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{15}\PY{p}{)}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{result}\PY{o}{.}\PY{n}{poster\PYZus{}path}\PY{p}{)}\PY{p}{:}
+        \PY{k}{try}\PY{p}{:}
+            \PY{n}{ax}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{off}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{ax}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{n}{result}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{title}\PY{p}{)}
+            \PY{n}{a} \PY{o}{=} \PY{n}{io}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{https://image.tmdb.org/t/p/w500/}\PY{l+s+si}{\PYZob{}}\PY{n}{j}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{ax}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{a}\PY{p}{)}
+        \PY{k}{except}\PY{p}{:} \PY{k}{pass}
+    \PY{n}{fig}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+    \PY{n}{fig}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{get\PYZus{}recommendations}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Creed III}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_45_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+Recommendations
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_45_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{pickle}\PY{o}{.}\PY{n}{dump}\PY{p}{(}\PY{n}{df1}\PY{p}{,}\PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{movie\PYZus{}list.pkl}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wb}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{pickle}\PY{o}{.}\PY{n}{dump}\PY{p}{(}\PY{n}{tfidf\PYZus{}matrix}\PY{p}{,}\PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tfidf\PYZus{}matrix.pkl}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wb}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{deployment}{%
+\paragraph{Deployment}\label{deployment}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Install streamlit }
+\PY{c+c1}{\PYZsh{} NB : If any error occurs during installation process , run it again}
+\PY{o}{!}pip\PY{+w}{ }install\PY{+w}{ }\PYZhy{}q\PY{+w}{ }streamlit
+\PY{o}{!}npm\PY{+w}{ }install\PY{+w}{ }\PYZhy{}g\PY{+w}{ }localtunnel\PY{+w}{ }\PYZhy{}U
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+     \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{9.7/9.7 MB}
+\textcolor{ansi-red}{112.6 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+     \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{4.8/4.8 MB}
+\textcolor{ansi-red}{114.4 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+  Preparing metadata (setup.py) {\ldots} done
+     \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{164.8/164.8 kB}
+\textcolor{ansi-red}{17.9 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+     \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{82.1/82.1 kB}
+\textcolor{ansi-red}{10.5 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+     \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{184.3/184.3 kB}
+\textcolor{ansi-red}{20.1 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+     \textcolor{ansi-black-intense}{━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━} \textcolor{ansi-green}{62.7/62.7 kB}
+\textcolor{ansi-red}{7.3 MB/s} eta \textcolor{ansi-cyan}{0:00:00}
+  Building wheel for validators (setup.py) {\ldots} done
+/tools/node/bin/lt ->
+/tools/node/lib/node\_modules/localtunnel/bin/lt.js
++ localtunnel@2.0.2
+added 22 packages from 22 contributors in 1.543s
+    \end{Verbatim}
+To deploy any file, it should be in .py format
+Make a .py file and Put code for front and backhand inside .py file
+%%writefile command will convert all the code within this cell into .py file
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZpc{}\PYZpc{}writefile} movie\PYZus{}recommendation\PYZus{}app.py
+
+\PY{k+kn}{import} \PY{n+nn}{pickle}
+\PY{k+kn}{import} \PY{n+nn}{streamlit} \PY{k}{as} \PY{n+nn}{st}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics}\PY{n+nn}{.}\PY{n+nn}{pairwise} \PY{k+kn}{import} \PY{n}{cosine\PYZus{}similarity}
+\PY{k+kn}{from} \PY{n+nn}{PIL} \PY{k+kn}{import} \PY{n}{Image}
+
+\PY{n+nd}{@st}\PY{o}{.}\PY{n}{cache}
+\PY{k}{def} \PY{n+nf}{get\PYZus{}recommendation}\PY{p}{(}\PY{n}{title}\PY{p}{)}\PY{p}{:}
+    \PY{n}{idx} \PY{o}{=} \PY{n}{df1}\PY{o}{.}\PY{n}{index}\PY{p}{[}\PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{title}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{n}{title}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{n}{poster} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{https://image.tmdb.org/t/p/w500/}\PY{l+s+si}{\PYZob{}}\PY{n}{df1}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{idx}\PY{p}{,}\PY{+w}{ }\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{poster\PYZus{}path}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}
+
+    \PY{c+c1}{\PYZsh{} Get the pairwsie similarity scores of all movies with that movie}
+    \PY{n}{sim\PYZus{}scores} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{enumerate}\PY{p}{(}
+        \PY{n}{cosine\PYZus{}similarity}\PY{p}{(}
+            \PY{n}{tfidf\PYZus{}matrix}\PY{p}{,}
+            \PY{n}{tfidf\PYZus{}matrix}\PY{p}{[}\PY{n}{idx}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Sort the movies based on the similarity scores}
+    \PY{n}{sim\PYZus{}scores} \PY{o}{=} \PY{n+nb}{sorted}\PY{p}{(}\PY{n}{sim\PYZus{}scores}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{reverse}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Get the scores of the 10 most similar movies}
+    \PY{n}{sim\PYZus{}scores} \PY{o}{=} \PY{n}{sim\PYZus{}scores}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{l+m+mi}{13}\PY{p}{]}
+
+    \PY{c+c1}{\PYZsh{} Get the movie indices}
+    \PY{n}{movie\PYZus{}indices} \PY{o}{=} \PY{p}{[}\PY{n}{i}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{sim\PYZus{}scores}\PY{p}{]}
+
+    \PY{c+c1}{\PYZsh{} Return the top 10 most similar movies}
+    \PY{n}{result} \PY{o}{=} \PY{n}{df1}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{n}{movie\PYZus{}indices}\PY{p}{]}
+
+    \PY{n}{recommended\PYZus{}movie\PYZus{}names} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{n}{recommended\PYZus{}movie\PYZus{}posters} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{n}{recommended\PYZus{}movie\PYZus{}overview} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{result}\PY{o}{.}\PY{n}{poster\PYZus{}path}\PY{p}{)}\PY{p}{:}
+        \PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{result}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{title}\PY{p}{)}
+        \PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{https://image.tmdb.org/t/p/w500/}\PY{l+s+si}{\PYZob{}}\PY{n}{j}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{recommended\PYZus{}movie\PYZus{}overview}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{result}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{overview}\PY{p}{)}
+    \PY{k}{return} \PY{n}{poster}\PY{p}{,} \PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{,} \PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{,} \PY{n}{recommended\PYZus{}movie\PYZus{}overview}
+
+
+\PY{n}{image} \PY{o}{=} \PY{n}{Image}\PY{o}{.}\PY{n}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Movie Recommendation System.jpg}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{image}\PY{p}{)}
+
+\PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{You might have wondered sometime or at some point that how do platforms like Netflix or AmazonPrime Video are able to recommend us TV shows or movies, what kind of an algorithm do these websites use to recommend us movies. Well as complicated or difficult as it might seem this is simply just a mixture of some machine learning algorithms with some Natural Language Processing. }\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{There are two main techniques used in recommendation system, known as content\PYZhy{}based filtering and collaborative filtering}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{For this project I have used Content Based Recommendation System, It uses attributes such as genre, director, description, actors, etc. for movies, to make suggestions for the users. The intuition behind this sort of recommendation system is that if a user liked a particular movie or show, he/she might like a movie or a show similar to it.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{df1} \PY{o}{=} \PY{n}{pickle}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{movie\PYZus{}list.pkl }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rb}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{tfidf\PYZus{}matrix} \PY{o}{=} \PY{n}{pickle}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tfidf\PYZus{}matrix.pkl }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rb}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{movies\PYZus{}list} \PY{o}{=} \PY{n}{df1}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{title}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+\PY{n}{selected\PYZus{}movie} \PY{o}{=} \PY{n}{st}\PY{o}{.}\PY{n}{selectbox}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Type and Choose The Movie}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{movies\PYZus{}list}\PY{p}{)}
+
+\PY{k}{if} \PY{n}{st}\PY{o}{.}\PY{n}{button}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Show Recommendation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+    \PY{n}{poster}\PY{p}{,}\PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{,}\PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{,}\PY{n}{recommended\PYZus{}movie\PYZus{}overview} \PY{o}{=} \PY{n}{get\PYZus{}recommendation}\PY{p}{(}\PY{n}{selected\PYZus{}movie}\PY{p}{)}
+    \PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{poster}\PY{p}{,}\PY{n}{width}\PY{o}{=}\PY{l+m+mi}{160}\PY{p}{)}
+    \PY{n}{col1}\PY{p}{,} \PY{n}{col2}\PY{p}{,} \PY{n}{col3}\PY{p}{,} \PY{n}{col4} \PY{o}{=} \PY{n}{st}\PY{o}{.}\PY{n}{columns}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}
+    \PY{k}{with} \PY{n}{col1}\PY{p}{:}
+        \PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+        \PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+        \PY{k}{with} \PY{n}{st}\PY{o}{.}\PY{n}{expander}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OverView}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{st}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}overview}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+
+        \PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+        \PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+        \PY{k}{with} \PY{n}{st}\PY{o}{.}\PY{n}{expander}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OverView}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{st}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}overview}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+
+        \PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{[}\PY{l+m+mi}{8}\PY{p}{]}\PY{p}{)}
+        \PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{[}\PY{l+m+mi}{8}\PY{p}{]}\PY{p}{)}
+        \PY{k}{with} \PY{n}{st}\PY{o}{.}\PY{n}{expander}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OverView}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{st}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}overview}\PY{p}{[}\PY{l+m+mi}{8}\PY{p}{]}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{col2}\PY{p}{:}
+        \PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+        \PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+        \PY{k}{with} \PY{n}{st}\PY{o}{.}\PY{n}{expander}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OverView}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{st}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}overview}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+
+        \PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{[}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+        \PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{[}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+        \PY{k}{with} \PY{n}{st}\PY{o}{.}\PY{n}{expander}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OverView}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{st}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}overview}\PY{p}{[}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+
+        \PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{[}\PY{l+m+mi}{9}\PY{p}{]}\PY{p}{)}
+        \PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{[}\PY{l+m+mi}{9}\PY{p}{]}\PY{p}{)}
+        \PY{k}{with} \PY{n}{st}\PY{o}{.}\PY{n}{expander}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OverView}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{st}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}overview}\PY{p}{[}\PY{l+m+mi}{9}\PY{p}{]}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{col3}\PY{p}{:}
+        \PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+        \PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+        \PY{k}{with} \PY{n}{st}\PY{o}{.}\PY{n}{expander}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OverView}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{st}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}overview}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+
+        \PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}
+        \PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}
+        \PY{k}{with} \PY{n}{st}\PY{o}{.}\PY{n}{expander}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OverView}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{st}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}overview}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}
+
+        \PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{[}\PY{l+m+mi}{10}\PY{p}{]}\PY{p}{)}
+        \PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{[}\PY{l+m+mi}{10}\PY{p}{]}\PY{p}{)}
+        \PY{k}{with} \PY{n}{st}\PY{o}{.}\PY{n}{expander}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OverView}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{st}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}overview}\PY{p}{[}\PY{l+m+mi}{10}\PY{p}{]}\PY{p}{)}
+
+    \PY{k}{with} \PY{n}{col4}\PY{p}{:}
+        \PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+        \PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+        \PY{k}{with} \PY{n}{st}\PY{o}{.}\PY{n}{expander}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OverView}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{st}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}overview}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+
+        \PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{[}\PY{l+m+mi}{7}\PY{p}{]}\PY{p}{)}
+        \PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{[}\PY{l+m+mi}{7}\PY{p}{]}\PY{p}{)}
+        \PY{k}{with} \PY{n}{st}\PY{o}{.}\PY{n}{expander}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OverView}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{st}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}overview}\PY{p}{[}\PY{l+m+mi}{7}\PY{p}{]}\PY{p}{)}
+
+        \PY{n}{st}\PY{o}{.}\PY{n}{image}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}posters}\PY{p}{[}\PY{l+m+mi}{11}\PY{p}{]}\PY{p}{)}
+        \PY{n}{st}\PY{o}{.}\PY{n}{markdown}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}names}\PY{p}{[}\PY{l+m+mi}{11}\PY{p}{]}\PY{p}{)}
+        \PY{k}{with} \PY{n}{st}\PY{o}{.}\PY{n}{expander}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{OverView}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+            \PY{n}{st}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{recommended\PYZus{}movie\PYZus{}overview}\PY{p}{[}\PY{l+m+mi}{11}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Writing movie\_recommendation\_app.py
+    \end{Verbatim}
+
+    Writing movie\_recommendation\_app.py
+
+    When you'll run following cell, it will display a UI in your terminal
+with public URL of your tunnel and other status and metrics information
+about connections made over your tunnel
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{!}streamlit\PY{+w}{ }run\PY{+w}{ }movie\PYZus{}recommendation\PYZus{}app.py\PY{+w}{ }\PY{p}{\PYZam{}}\PY{+w}{ }npx\PY{+w}{ }localtunnel\PY{+w}{ }\PYZhy{}\PYZhy{}port\PY{+w}{ }\PY{l+m}{8501}\PY{+w}{ }
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+npx: installed 22 in 2.778s
+your url is: https://yellow-chefs-greet-34-86-172-75.loca.lt
+
+Collecting usage statistics. To deactivate, set browser.gatherUsageStats to
+False.
+
+
+\textcolor{ansi-blue-intense}{\textbf{  You can now view your Streamlit app in your browser.}}
+
+\textcolor{ansi-blue}{  Network URL: }\textbf{http://172.28.0.12:8501}
+\textcolor{ansi-blue}{  External URL: }\textbf{http://34.86.172.75:8501}
+
+    \end{Verbatim}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
